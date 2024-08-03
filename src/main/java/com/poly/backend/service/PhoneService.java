@@ -9,9 +9,9 @@ public interface PhoneService {
 
     List<PhoneDTO> getAllPhones();
 
-    void addPhone(PhoneDTO phoneDTO);
+    PhoneDTO addPhone(PhoneDTO phoneDTO);
 
-    void updatePhone(long id, PhoneDTO phoneDTO);
+    PhoneDTO updatePhone(long id, PhoneDTO phoneDTO);
 
     void deletePhone(long id);
 }

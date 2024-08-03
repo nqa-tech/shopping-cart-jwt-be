@@ -5,6 +5,9 @@ import com.poly.backend.dto.ErrorDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
@@ -14,14 +17,15 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 /**
  * Lớp UserAuthenticationEntryPoint thực hiện chức năng xử lý các yêu cầu không được xác thực.
  * Khi một yêu cầu không xác thực truy cập vào các URL yêu cầu xác thực, lớp này sẽ trả về phản hồi lỗi 401 (Unauthorized).
  */
 public class UserAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+  final static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     /**
      * Phương thức commence thực hiện xử lý các yêu cầu không xác thực.

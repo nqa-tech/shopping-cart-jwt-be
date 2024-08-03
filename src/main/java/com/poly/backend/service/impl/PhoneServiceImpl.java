@@ -6,8 +6,9 @@ import com.poly.backend.exception.AppException;
 import com.poly.backend.mapper.PhoneMapper;
 import com.poly.backend.repository.PhoneRepository;
 import com.poly.backend.service.PhoneService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +16,12 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
 public class PhoneServiceImpl implements PhoneService {
 
-    @Autowired
-    private final PhoneRepository phoneRepository;
-    @Autowired
-    private final PhoneMapper phoneMapper;
+     final PhoneRepository phoneRepository;
+     final PhoneMapper phoneMapper;
 
     @Override
     public PhoneDTO getPhoneById(Long id) {
@@ -36,14 +36,15 @@ public class PhoneServiceImpl implements PhoneService {
     }
 
     @Override
-    public void addPhone(PhoneDTO phoneDTO) {
+    public PhoneDTO addPhone(PhoneDTO phoneDTO) {
         validatePhone(phoneDTO);
         Phone phone = phoneMapper.toEntity(phoneDTO);
         phoneRepository.save(phone);
+        return phoneDTO;
     }
 
     @Override
-    public void updatePhone(long id, PhoneDTO phoneDTO) {
+    public PhoneDTO updatePhone(long id, PhoneDTO phoneDTO) {
         validatePhone(phoneDTO);
         Optional<Phone> optionalPhone = phoneRepository.findById(id);
         if (optionalPhone.isPresent()) {
@@ -51,6 +52,7 @@ public class PhoneServiceImpl implements PhoneService {
             phoneMapper.updateFromDto(phoneDTO, phone);
             phoneRepository.save(phone);
         }
+        return phoneDTO;
     }
 
     @Override

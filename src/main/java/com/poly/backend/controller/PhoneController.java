@@ -1,25 +1,30 @@
 package com.poly.backend.controller;
 
 import com.poly.backend.dto.PhoneDTO;
+import com.poly.backend.dto.response.Response;
 import com.poly.backend.exception.AppException;
 import com.poly.backend.service.PhoneService;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/phones")
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PhoneController {
 
-    private final PhoneService phoneService;
-    private static final Logger logger = LoggerFactory.getLogger(PhoneController.class);
+    final PhoneService phoneService;
+    static final Logger logger = LoggerFactory.getLogger(PhoneController.class);
 
     /**
      * Endpoint: GET /api/phones
@@ -60,14 +65,18 @@ public class PhoneController {
      * Phản hồi: Trả về thông tin của sản phẩm điện thoại đã được thêm và thông báo thành công, hoặc phản hồi lỗi nếu có lỗi.
      */
     @PostMapping
-    public ResponseEntity<String> addPhone(@Valid @RequestBody PhoneDTO phoneDTO) {
+    public ResponseEntity<Response> addPhone(@Valid @RequestBody PhoneDTO phoneDTO) {
         try {
-            phoneService.addPhone(phoneDTO);
+            PhoneDTO createdPhone = phoneService.addPhone(phoneDTO);
             logger.info("Thêm sản phẩm điện thoại thành công");
-            return ResponseEntity.status(HttpStatus.CREATED).body("Thêm sản phẩm điện thoại thành công");
+            return ResponseEntity.status(HttpStatus.CREATED).body(
+                    new Response(LocalDateTime.now(), createdPhone, "Thêm sản phẩm điện thoại thành công", 201)
+            );
         } catch (AppException ex) {
             logger.error("Lỗi khi thêm sản phẩm điện thoại: {}", ex.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+            return ResponseEntity.status(ex.getStatus()).body(
+                    new Response(LocalDateTime.now(), null, ex.getMessage(), ex.getStatus().value())
+            );
         }
     }
 
@@ -78,14 +87,18 @@ public class PhoneController {
      * Phản hồi: Trả về thông tin của sản phẩm điện thoại sau khi cập nhật và thông báo thành công, hoặc phản hồi lỗi nếu không tìm thấy sản phẩm điện thoại để cập nhật.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<String> updatePhone(@PathVariable long id, @Valid @RequestBody PhoneDTO phoneDTO) {
+    public ResponseEntity<Response> updatePhone(@PathVariable long id, @Valid @RequestBody PhoneDTO phoneDTO) {
         try {
-            phoneService.updatePhone(id, phoneDTO);
+            PhoneDTO updatedPhone = phoneService.updatePhone(id, phoneDTO);
             logger.info("Cập nhật thông tin sản phẩm điện thoại thành công, ID: {}", id);
-            return ResponseEntity.ok("Cập nhật thông tin sản phẩm điện thoại thành công");
+            return ResponseEntity.ok(
+                    new Response(LocalDateTime.now(), updatedPhone, "Cập nhật thông tin sản phẩm điện thoại thành công", 200)
+            );
         } catch (AppException ex) {
             logger.error("Lỗi khi cập nhật thông tin sản phẩm điện thoại, ID: {}: {}", id, ex.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+            return ResponseEntity.status(ex.getStatus()).body(
+                    new Response(LocalDateTime.now(), null, ex.getMessage(), ex.getStatus().value())
+            );
         }
     }
 
@@ -96,14 +109,18 @@ public class PhoneController {
      * Phản hồi: Trả về thông báo thành công nếu xóa thành công, hoặc phản hồi lỗi nếu không tìm thấy sản phẩm điện thoại để xóa.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePhone(@PathVariable long id) {
+    public ResponseEntity<Response> deletePhone(@PathVariable long id) {
         try {
             phoneService.deletePhone(id);
             logger.info("Xóa sản phẩm điện thoại thành công, ID: {}", id);
-            return ResponseEntity.ok("Xóa thông tin sản phẩm điện thoại thành công");
+            return ResponseEntity.ok(
+                    new Response(LocalDateTime.now(), null, "Xóa thông tin sản phẩm điện thoại thành công", 200)
+            );
         } catch (AppException ex) {
             logger.error("Lỗi khi xóa sản phẩm điện thoại, ID: {}: {}", id, ex.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+            return ResponseEntity.status(ex.getStatus()).body(
+                    new Response(LocalDateTime.now(), null, ex.getMessage(), ex.getStatus().value())
+            );
         }
     }
 }

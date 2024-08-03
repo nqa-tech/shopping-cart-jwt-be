@@ -1,6 +1,8 @@
 package com.poly.backend.config;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,18 +16,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
-
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 /**
  * Lớp SecurityConfig cung cấp cấu hình bảo mật cho ứng dụng.
  * Nó cấu hình các quy tắc bảo mật, các URL được bảo vệ và xác thực JWT token.
  */
 public class SecurityConfig {
 
-    private final UserAuthenticationEntryPoint userAuthenticationEntryPoint;
+  final  UserAuthenticationEntryPoint userAuthenticationEntryPoint;
+  final  CustomJwtFilter jwtAuthFilter;
 
-    @Autowired
-    CustomJwtFilter jwtAuthFilter;
-    private final String[] PROTECTED_URLS = {"/api/teachers/**"};
+    final  String[] PHONE_PROTECTED_URLS = {"/api/phones/**"};
+    final String[] ORDER_PROTECTED_URLS = {"/api/orders/**"};
 
     /**
      * Phương thức cấu hình chuỗi lọc bảo mật
@@ -46,11 +48,18 @@ public class SecurityConfig {
                     /**
                      - requestMatchers...hasRole("ADMIN"): tức là các phương thức HTTP
                      này cần có quyền ADMIN để truy cập
-                    -  PROTECTED_URLS: Danh sách các endpoint được bảo vệ yêu cầu quyền ADMIN để truy cập
+                     -  PHONE_PROTECTED_URLS: Danh sách các endpoint được bảo vệ yêu cầu quyền ADMIN để truy cập
                      */
-                    auth.requestMatchers(HttpMethod.DELETE, PROTECTED_URLS).hasRole("ADMIN")
-                            .requestMatchers(HttpMethod.POST, PROTECTED_URLS).hasRole("ADMIN")
-                            .requestMatchers(HttpMethod.PUT, PROTECTED_URLS).hasRole("ADMIN")
+                    auth.requestMatchers(HttpMethod.DELETE, PHONE_PROTECTED_URLS).hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.POST, PHONE_PROTECTED_URLS).hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.PUT, PHONE_PROTECTED_URLS).hasRole("ADMIN")
+                            /**
+                             - requestMatchers("/api/orders/**").permitAll(): các phương thức với endpoint này đều có thể truy cập mà không cần xác thực
+                             */
+                            .requestMatchers(HttpMethod.POST, ORDER_PROTECTED_URLS).permitAll()
+                            .requestMatchers(HttpMethod.GET, ORDER_PROTECTED_URLS).hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.PUT, ORDER_PROTECTED_URLS).hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.DELETE, ORDER_PROTECTED_URLS).hasRole("ADMIN")
                             /**
                              - requestMatchers("/**").permitAll(): các phương thức với endpoint khác
                              được bắt đầu bằng dạng "/**" đều được truy cập
@@ -67,4 +76,3 @@ public class SecurityConfig {
         return http.build();
     }
 }
-
