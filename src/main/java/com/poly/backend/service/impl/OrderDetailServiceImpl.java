@@ -6,7 +6,9 @@ import com.poly.backend.exception.AppException;
 import com.poly.backend.mapper.OrderDetailMapper;
 import com.poly.backend.repository.OrderDetailRepository;
 import com.poly.backend.service.OrderDetailService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +17,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
 public class OrderDetailServiceImpl implements OrderDetailService {
-    private final OrderDetailRepository orderDetailRepository;
-    private final OrderDetailMapper orderDetailMapper;
+     final OrderDetailRepository orderDetailRepository;
+     final OrderDetailMapper orderDetailMapper;
 
     @Override
     public OrderDetailDTO getOrderDetailById(Long id) {

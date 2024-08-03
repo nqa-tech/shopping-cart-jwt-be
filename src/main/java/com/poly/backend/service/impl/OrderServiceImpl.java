@@ -9,7 +9,9 @@ import com.poly.backend.mapper.OrderMapper;
 import com.poly.backend.repository.OrderRepository;
 import com.poly.backend.service.OrderDetailService;
 import com.poly.backend.service.OrderService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,12 +22,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    private final OrderRepository orderRepository;
-    private final OrderMapper orderMapper;
-    private final OrderDetailService orderDetailService;
+     final OrderRepository orderRepository;
+     final OrderMapper orderMapper;
+     final OrderDetailService orderDetailService;
 
     @Override
     public OrderDTO getOrderById(Long id) {

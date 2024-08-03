@@ -7,6 +7,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,17 +35,15 @@ import java.util.regex.Pattern;
 
 @Component
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 /**
  * Lớp CustomJwtFilter thực hiện chức năng lọc và xác thực JWT token cho mỗi yêu cầu HTTP.
  * Nó kiểm tra JWT token trong header của yêu cầu, xác thực token và thiết lập thông tin người dùng trong SecurityContext.
  */
 public class CustomJwtFilter extends OncePerRequestFilter {
 
-    @Value("${jwt.privateKey}")
-    private String secretKey;
-
-    @Autowired
-    private CustomUserDetail userDetailsService;
+    final JwtProperties jwtProperties;
+    final CustomUserDetail userDetailsService;
     /**
      * Phương thức lọc từng yêu cầu và xác thực JWT token
      * @param request
@@ -77,7 +77,7 @@ public class CustomJwtFilter extends OncePerRequestFilter {
      * @return tên người dùng được trích xuất từ token
      */
     public String parserToken(String token) {
-        Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
+        Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.getPrivateKey()));
         Claims claims = Jwts.parser().setSigningKey(key).build().parseClaimsJws(token).getBody();
         return claims.getSubject();
     }
@@ -101,7 +101,7 @@ public class CustomJwtFilter extends OncePerRequestFilter {
      */
     public boolean verifyToken(String token) {
         try {
-            Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
+            Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.getPrivateKey()));
             Jwts.parser().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (Exception e) {

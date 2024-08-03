@@ -8,7 +8,9 @@ import com.poly.backend.exception.AppException;
 import com.poly.backend.mapper.UserMapper;
 import com.poly.backend.repository.UserRepository;
 import com.poly.backend.service.UserService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,13 +18,14 @@ import org.springframework.stereotype.Service;
 import java.nio.CharBuffer;
 import java.util.Optional;
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
 public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository;
+     final UserRepository userRepository;
 
-    private final PasswordEncoder passwordEncoder;
+     final PasswordEncoder passwordEncoder;
 
-    private final UserMapper userMapper;
+     final UserMapper userMapper;
 
     public UserDTO login(CredentialsDTO credentialsDto) {
         User user = userRepository.findByUsername(credentialsDto.getUsername())

@@ -2,6 +2,9 @@ package com.poly.backend.config;
 
 import com.poly.backend.service.UserService;
 import com.poly.backend.dto.UserDTO;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,14 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 /**
  * Lớp CustomUserDetail thực hiện chức năng cung cấp thông tin chi tiết người dùng cho Spring Security.
  * Nó lấy thông tin người dùng từ UserService và xây dựng đối tượng UserDetails.
  */
 public class CustomUserDetail implements UserDetailsService {
-
-    @Autowired
-    UserService userService;
+    final UserService userService;
 
     /**
      * Phương thức tải thông tin người dùng bằng tên đăng nhập (login).
