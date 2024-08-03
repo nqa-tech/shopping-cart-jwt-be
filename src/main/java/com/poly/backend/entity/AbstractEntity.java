@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 @MappedSuperclass
 @Getter
@@ -30,11 +31,11 @@ public class AbstractEntity<T extends Serializable> implements Serializable {
     @Column(name = "created_At")
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_At")
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
 }
