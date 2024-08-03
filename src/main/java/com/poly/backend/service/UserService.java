@@ -20,4 +20,5 @@ public interface UserService {
     UserDTO login(CredentialsDTO credentialsDto);
     UserDTO register(SignUpDTO userDto);
     UserDTO findByUsernameLogin(String username);
+    Optional<User> findUserById(Long id);
 }

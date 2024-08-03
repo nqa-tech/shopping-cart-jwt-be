@@ -18,9 +18,7 @@ import java.util.Optional;
 @Service
 public class PhoneServiceImpl implements PhoneService {
 
-    @Autowired
     private final PhoneRepository phoneRepository;
-    @Autowired
     private final PhoneMapper phoneMapper;
 
     @Override
