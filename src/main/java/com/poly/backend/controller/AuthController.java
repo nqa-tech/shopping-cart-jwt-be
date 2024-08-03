@@ -7,7 +7,9 @@ import com.poly.backend.dto.UserDTO;
 import com.poly.backend.exception.AppException;
 import com.poly.backend.service.UserService;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RestController
 /**
  * Chức năng: Controller xử lý yêu cầu
@@ -25,9 +28,9 @@ import java.net.URI;
  */
 public class AuthController {
 
-    private final UserService userService;
-    private final UserAuthenticationProvider userAuthenticationProvider;
-    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+    final UserService userService;
+    final UserAuthenticationProvider userAuthenticationProvider;
+    static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     /**
      * Endpoint: POST /login

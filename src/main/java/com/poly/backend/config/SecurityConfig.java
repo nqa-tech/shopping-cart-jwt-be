@@ -1,6 +1,8 @@
 package com.poly.backend.config;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,20 +16,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
-
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 /**
  * Lớp SecurityConfig cung cấp cấu hình bảo mật cho ứng dụng.
  * Nó cấu hình các quy tắc bảo mật, các URL được bảo vệ và xác thực JWT token.
  */
 public class SecurityConfig {
 
-    private final UserAuthenticationEntryPoint userAuthenticationEntryPoint;
+  final  UserAuthenticationEntryPoint userAuthenticationEntryPoint;
+  final  CustomJwtFilter jwtAuthFilter;
 
-    @Autowired
-    CustomJwtFilter jwtAuthFilter;
-
-    private final String[] PHONE_PROTECTED_URLS = {"/api/phones/**"};
-    private final String[] ORDER_PROTECTED_URLS = {"/api/orders/**"};
+    final  String[] PHONE_PROTECTED_URLS = {"/api/phones/**"};
+    final String[] ORDER_PROTECTED_URLS = {"/api/orders/**"};
 
     /**
      * Phương thức cấu hình chuỗi lọc bảo mật

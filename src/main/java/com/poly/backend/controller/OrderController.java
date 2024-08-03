@@ -5,7 +5,9 @@ import com.poly.backend.dto.OrderDetailDTO;
 import com.poly.backend.exception.AppException;
 import com.poly.backend.service.OrderService;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,10 +19,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class OrderController {
 
-    private final OrderService orderService;
-    private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
+     final OrderService orderService;
+     static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     @GetMapping("/{id}")
     public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long id) {
