@@ -3,12 +3,13 @@ package com.poly.backend.mapper;
 import com.poly.backend.dto.OrderDetailDTO;
 import com.poly.backend.entity.Order;
 import com.poly.backend.entity.OrderDetail;
+import com.poly.backend.entity.Phone;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-04T02:06:03+0700",
+    date = "2024-08-05T08:24:29+0700",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 22.0.1 (Oracle Corporation)"
 )
 @Component
@@ -23,8 +24,8 @@ public class OrderDetailMapperImpl extends OrderDetailMapper {
         OrderDetailDTO.OrderDetailDTOBuilder orderDetailDTO = OrderDetailDTO.builder();
 
         orderDetailDTO.orderId( orderDetailOrderId( orderDetail ) );
+        orderDetailDTO.maSanPham( orderDetailMaSanPhamId( orderDetail ) );
         orderDetailDTO.id( orderDetail.getId() );
-        orderDetailDTO.maSanPham( orderDetail.getMaSanPham() );
         orderDetailDTO.tenSanPham( orderDetail.getTenSanPham() );
         orderDetailDTO.giaSanPham( orderDetail.getGiaSanPham() );
         orderDetailDTO.soLuong( orderDetail.getSoLuong() );
@@ -41,7 +42,7 @@ public class OrderDetailMapperImpl extends OrderDetailMapper {
         OrderDetail.OrderDetailBuilder orderDetail = OrderDetail.builder();
 
         orderDetail.order( mapOrder( orderDetailDTO.getOrderId() ) );
-        orderDetail.maSanPham( orderDetailDTO.getMaSanPham() );
+        orderDetail.maSanPham( mapPhone( orderDetailDTO.getMaSanPham() ) );
         orderDetail.tenSanPham( orderDetailDTO.getTenSanPham() );
         orderDetail.giaSanPham( orderDetailDTO.getGiaSanPham() );
         orderDetail.soLuong( orderDetailDTO.getSoLuong() );
@@ -56,7 +57,7 @@ public class OrderDetailMapperImpl extends OrderDetailMapper {
         }
 
         orderDetail.setOrder( mapOrder( orderDetailDTO.getOrderId() ) );
-        orderDetail.setMaSanPham( orderDetailDTO.getMaSanPham() );
+        orderDetail.setMaSanPham( mapPhone( orderDetailDTO.getMaSanPham() ) );
         orderDetail.setTenSanPham( orderDetailDTO.getTenSanPham() );
         orderDetail.setGiaSanPham( orderDetailDTO.getGiaSanPham() );
         orderDetail.setSoLuong( orderDetailDTO.getSoLuong() );
@@ -71,6 +72,21 @@ public class OrderDetailMapperImpl extends OrderDetailMapper {
             return null;
         }
         Long id = order.getId();
+        if ( id == null ) {
+            return null;
+        }
+        return id;
+    }
+
+    private Long orderDetailMaSanPhamId(OrderDetail orderDetail) {
+        if ( orderDetail == null ) {
+            return null;
+        }
+        Phone maSanPham = orderDetail.getMaSanPham();
+        if ( maSanPham == null ) {
+            return null;
+        }
+        Long id = maSanPham.getId();
         if ( id == null ) {
             return null;
         }

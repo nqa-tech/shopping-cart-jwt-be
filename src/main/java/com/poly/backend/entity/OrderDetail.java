@@ -11,11 +11,9 @@ import lombok.*;
 @Getter
 @Table(name = "order_details")
 public class OrderDetail extends AbstractEntity<Long> {
-
-
-
-    @Column(name = "ma_san_pham", nullable = false)
-    private Long maSanPham;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ma_san_pham", nullable = false)
+    private Phone maSanPham;
 
     @Column(name = "ten_san_pham", nullable = false)
     private String tenSanPham;
@@ -29,4 +27,5 @@ public class OrderDetail extends AbstractEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
+
 }

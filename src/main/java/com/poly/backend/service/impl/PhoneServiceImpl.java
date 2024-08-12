@@ -60,6 +60,12 @@ public class PhoneServiceImpl implements PhoneService {
         phoneRepository.deleteById(id);
     }
 
+    @Override
+    public Optional<Phone> findPhoneById(Long id) {
+        return phoneRepository.findById(id);
+    }
+
+
     private void validatePhone(PhoneDTO phoneDTO) {
         if (phoneDTO.getMaSanPham() == null || phoneDTO.getMaSanPham().isEmpty()) {
             throw new AppException("Mã sản phẩm không được để trống", HttpStatus.BAD_REQUEST);
